@@ -69,7 +69,7 @@ class ProductsController extends AbstractController
 
 
     #[Route('api/products/update/{id}', name: 'update_product', methods: ['PUT', 'PATCH'])]
-    public function updateProduct($id, Request $request, ProductsRepository $productsRepository, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    public function updateProduct($id, Request $request, ProductsRepository $productsRepository, EntityManagerInterface $entityManager, SerializerInterface $serializerInterface, ValidatorInterface $validator): JsonResponse
     {
         // Récupérez le produit existant par son ID
         $product = $productsRepository->find($id);
@@ -83,7 +83,14 @@ class ProductsController extends AbstractController
         $data = $request->getContent();
 
         // Désérialisez les données JSON en un objet Product en utilisant le groupe 'getProducts'
-        $updatedProduct = $serializer->deserialize($data, Products::class, 'json', ['groups' => 'getProducts']);
+        $updatedProduct = $serializerInterface->deserialize($data, Products::class, 'json', ['groups' => 'getProducts']);
+
+        // On vérifie les erreurs
+        $errors = $validator->validate($product);
+
+        if ($errors->count() > 0) {
+            return new JsonResponse($serializerInterface->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST, [], true);
+        }
 
         // Mettez à jour les propriétés du produit existant avec les nouvelles données
         $product->setName($updatedProduct->getName());
