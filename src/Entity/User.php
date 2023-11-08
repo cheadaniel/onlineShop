@@ -9,6 +9,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -16,24 +18,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['getUser'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['getUser'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['getUser'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['getUser'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['getUser'])]
     private ?string $Address = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['getUser'])]
     private ?string $Wallet = null;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Command::class, orphanRemoval: true)]
@@ -42,6 +50,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->Command = new ArrayCollection();
+        $this->Wallet = 0.00; // Valeur par défaut pour $Wallet
+        $this->roles = ['ROLE_USER'];
     }
 
     public function getId(): ?int
