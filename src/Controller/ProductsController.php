@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductsController extends AbstractController
 {
@@ -44,13 +45,20 @@ class ProductsController extends AbstractController
     }
 
     #[Route('api/products/create', name: 'create_product', methods: ['POST'])]
-    public function createProduct(Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $entityManager): JsonResponse
+    public function createProduct(Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse
     {
         // Récupérer les données de la requête POST
         $data = $request->getContent();
 
         // Désérialiser les données JSON en un objet Product
         $product = $serializerInterface->deserialize($data, Products::class, 'json');
+
+        // On vérifie les erreurs
+        $errors = $validator->validate($product);
+
+        if ($errors->count() > 0) {
+            return new JsonResponse($serializerInterface->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST, [], true);
+        }
 
         $entityManager->persist($product);
         $entityManager->flush();
