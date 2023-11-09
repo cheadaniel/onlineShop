@@ -34,10 +34,14 @@ class CreateCommandLineService
                 return new JsonResponse(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
             }
 
+            $newQuantity = $productGet->getInventory() - $product['quantity'];
+            $productGet->setInventory($newQuantity);
+
             $commandLine->setProducts($productGet);
 
             $this->entityManager->persist($commandLine);
-            $this->entityManager->flush();
+            $this->entityManager->persist($productGet);
         }
+        $this->entityManager->flush();
     }
 }
