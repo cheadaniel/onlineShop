@@ -30,7 +30,7 @@ class ProductsController extends AbstractController
     }
 
     #[Route('api/products/{id}', name: 'detailProduct', methods: ['GET'])]
-    public function getDetailProduct($id, ProductsRepository $productsRepository, SerializerInterface $serializer): JsonResponse
+    public function getProductDetail($id, ProductsRepository $productsRepository, SerializerInterface $serializer): JsonResponse
     {
         $product = $productsRepository->find($id);
         if (!$product) {
@@ -65,7 +65,7 @@ class ProductsController extends AbstractController
         $entityManager->flush();
 
         // Retournez une réponse JSON indiquant que le produit a été créé avec succès
-        return new JsonResponse(['message' => 'Success'], Response::HTTP_CREATED);
+        return new JsonResponse(['message' => 'Product created'], Response::HTTP_CREATED);
     }
 
 

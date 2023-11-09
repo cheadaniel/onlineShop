@@ -20,5 +20,15 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\CreateCommandLineService:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+        tags: { name: 'app.create_command_line'}
+
+    App\Service\JsonDataService:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+        tags: { name: 'app.json_data_service'}
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
