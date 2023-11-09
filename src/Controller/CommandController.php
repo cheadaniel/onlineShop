@@ -50,7 +50,12 @@ class CommandController extends AbstractController
         $userId = $jsonData['user_id'];
         $user = $userRepository->find($userId);
         if (!$user) {
-            return new JsonResponse(['message' => 'Utilisateur non trouvé'], Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $userWallet = $user->getWallet();
+        if ($userWallet < $jsonData['total_price']) {
+            return new JsonResponse(['message' => 'Not enough money in User Wallet'], Response::HTTP_BAD_REQUEST);
         }
 
         // Obtenir la date avec le bon type pour pouvoir utiliser setDate correctement
@@ -64,6 +69,10 @@ class CommandController extends AbstractController
         $command->setTotalPrice($jsonData['total_price']);
 
         $entityManager->persist($command);
+        $entityManager->flush();
+
+        $user->setWallet($userWallet - $jsonData['total_price']);
+        $entityManager->persist($user);
         $entityManager->flush();
 
         $productsArray = $jsonData['products'];
