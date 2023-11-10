@@ -10,8 +10,6 @@ use App\Repository\UserRepository;
 use App\Service\CreateCommandLineService;
 use App\Service\JsonDataService;
 use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -108,5 +106,40 @@ class CommandController extends AbstractController
         );
     }
 
+    #[Route('api/commands/update/status/{id}', name: 'update_status_command', methods: ['PUT', 'PATCH'])]
+    public function updateCommand($id, Request $request, CommandRepository $commandRepository, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
+    {
+        $command = $commandRepository->find($id);
+        
+        if (!$command) {
+            return new JsonResponse(['message' => 'Command not found'], Response::HTTP_NOT_FOUND);
+        }
 
+        $data = $request->getContent();
+        $jsonData = json_decode($data, true);
+
+        $newStatus = $jsonData["newStatus"];
+
+        $command->setStatus($newStatus);
+
+        $entityManager->persist($command);
+        $entityManager->flush();
+
+        return new JsonResponse(['message' => 'Update successful'], Response::HTTP_OK);
+    }
+
+    #[Route('api/commands/delete/{id}', name: 'delete_command', methods: ['DELETE'])]
+    public function deleteCommand($id, CommandRepository $commandRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $command = $commandRepository->find($id);
+
+        if (!$command) {
+            return new JsonResponse(['message' => 'Command not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->remove($command);
+        $entityManager->flush();
+
+        return new JsonResponse(['message' => 'Command deleted'], Response::HTTP_OK);
+    }
 }
