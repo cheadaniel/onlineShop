@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -46,6 +47,7 @@ class ProductsController extends AbstractController
     }
 
     #[Route('api/products/create', name: 'create_product', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN', message: 'You do not have sufficient rights to create a product.')]
     public function createProduct(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse
     {
         // Récupérer les données de la requête POST
@@ -70,6 +72,7 @@ class ProductsController extends AbstractController
 
 
     #[Route('api/products/update/{id}', name: 'update_product', methods: ['PUT', 'PATCH'])]
+    #[IsGranted('ROLE_ADMIN', message: 'You do not have sufficient rights to update a product.')]
     public function updateProduct($id, Request $request, ProductsRepository $productsRepository, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator): JsonResponse
     {
         // Récupérer le produit existant par son ID
@@ -104,6 +107,7 @@ class ProductsController extends AbstractController
     }
 
     #[Route('api/products/delete/{id}', name: 'delete_product', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN', message: 'You do not have sufficient rights to delate a product.')]
     public function deleteProduct($id, ProductsRepository $productsRepository, EntityManagerInterface $entityManager): JsonResponse
     {
         $product = $productsRepository->find($id);

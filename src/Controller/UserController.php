@@ -11,12 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserController extends AbstractController
 {
     #[Route('api/users', name: 'all_users', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN', message: 'You do not have sufficient rights to go to this page.')]
     public function getUsersList(UserRepository $userRepository, SerializerInterface $serializer): JsonResponse
     {
         $usersList = $userRepository->findAll();
@@ -53,12 +56,26 @@ class UserController extends AbstractController
     }
 
     #[Route('api/users/{id}', name: 'detailUser', methods: ['GET'])]
-    public function getUserFromId($id, UserRepository $userRepository, SerializerInterface $serializer): JsonResponse
+    public function getUserFromId($id, UserRepository $userRepository, SerializerInterface $serializer, UserInterface $currentUser): JsonResponse
     {
+
+
         $user = $userRepository->find($id);
 
         if (!$user) {
             return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Empecher les autres utilsateurs de voir les profils qui ne sont pas le leur sauf l'admin
+        if ($currentUser->getId() !== $user->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            $responseData = [
+                'message' => 'You do not have sufficient rights to view this user.',
+                'error_code' => 'ACCESS_DENIED',
+            ];
+
+            $response = new JsonResponse($responseData, 403);
+
+            return $response;
         }
 
         $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'getUser']);
@@ -67,12 +84,23 @@ class UserController extends AbstractController
     }
 
     #[Route('api/users/update/{id}', name: 'update_user', methods: ['PUT', 'PATCH'])]
-    public function updateUser($id, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator, UserPasswordHasherInterface $userPasswordHasherInterface): JsonResponse
+    public function updateUser($id, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator, UserPasswordHasherInterface $userPasswordHasherInterface, UserInterface $currentUser): JsonResponse
     {
         $user = $userRepository->find($id);
 
         if (!$user) {
             return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($currentUser->getId() !== $user->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            $responseData = [
+                'message' => 'You do not have sufficient rights to view this user.',
+                'error_code' => 'ACCESS_DENIED',
+            ];
+
+            $response = new JsonResponse($responseData, 403);
+
+            return $response;
         }
 
         $data = $request->getContent();
@@ -122,12 +150,23 @@ class UserController extends AbstractController
     }
 
     #[Route('api/users/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
-    public function deleteUser($id, UserRepository $userRepository, EntityManagerInterface $entityManager): JsonResponse
+    public function deleteUser($id, UserRepository $userRepository, EntityManagerInterface $entityManager, UserInterface $currentUser): JsonResponse
     {
         $user = $userRepository->find($id);
 
         if (!$user) {
             return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        if ($currentUser->getId() !== $user->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            $responseData = [
+                'message' => 'You do not have sufficient rights to view this user.',
+                'error_code' => 'ACCESS_DENIED',
+            ];
+
+            $response = new JsonResponse($responseData, 403);
+
+            return $response;
         }
 
         $entityManager->remove($user);

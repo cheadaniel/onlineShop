@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -88,12 +90,23 @@ class CommandController extends AbstractController
     }
 
     #[Route('api/commands/{id}', name: 'detail_command', methods: ['GET'])]
-    public function getCommandDetail($id, CommandRepository $commandRepository, SerializerInterface $serializer): JsonResponse
+    public function getCommandDetail($id, CommandRepository $commandRepository, SerializerInterface $serializer, UserInterface $currentUser): JsonResponse
     {
         $command = $commandRepository->find($id);
 
         if (!$command) {
             return new JsonResponse(['message' => 'Command not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $userCommand = $command->getUser();
+        $userCommandId = $userCommand->getId();
+        if ($currentUser->getId() !== $userCommandId && !$this->isGranted('ROLE_ADMIN')) {
+            $responseData = [
+                'message' => 'You do not have sufficient rights to view this command.',
+                'error_code' => 'ACCESS_DENIED',
+            ];
+            $response = new JsonResponse($responseData, 403);
+            return $response;
         }
 
         $jsonCommand = $serializer->serialize($command, 'json', ['groups' => 'getCommands']);
@@ -107,6 +120,7 @@ class CommandController extends AbstractController
     }
 
     #[Route('api/commands/update/status/{id}', name: 'update_status_command', methods: ['PUT', 'PATCH'])]
+    #[IsGranted('ROLE_ADMIN', message: 'You do not have sufficient rights to update a command.')]
     public function updateCommand($id, Request $request, CommandRepository $commandRepository, EntityManagerInterface $entityManager, SerializerInterface $serializer): JsonResponse
     {
         $command = $commandRepository->find($id);
@@ -129,6 +143,7 @@ class CommandController extends AbstractController
     }
 
     #[Route('api/commands/delete/{id}', name: 'delete_command', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN', message: 'You do not have sufficient rights to delete a command.')]
     public function deleteCommand($id, CommandRepository $commandRepository, EntityManagerInterface $entityManager): JsonResponse
     {
         $command = $commandRepository->find($id);
