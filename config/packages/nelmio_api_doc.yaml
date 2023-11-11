@@ -43,6 +43,60 @@ nelmio_api_doc:
                         password:
                             type: string
                             default: 0123456789
+                CommandDetail:
+                    type: object
+                    properties: 
+                        id:
+                            type: integer
+                            example: 1
+                        status: 
+                            type: string
+                            example: En cours de préparation
+                        user:
+                            $ref: '#/components/schemas/UserDetail'
+                        total_price:
+                            type: string
+                            example: "39.98"
+                        date:
+                            type: string
+                            format: date-time
+                            example: "2023-11-13T12:34:56Z"
+                        products:
+                            type: array
+                            items: 
+                                $ref: '#/components/schemas/ProductDetail'
+
+                UserDetail:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            example: 1
+                        username:
+                            type: string
+                            example: test_user
+                        email:
+                            type: string
+                            example: test@test.com
+
+                ProductDetail:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            example: 1
+                        name:
+                            type: string
+                            example: Product Name
+                        price:
+                            type: float
+                            example: 10.99
+                        inventory:
+                            type: integer
+                            example: 100
+
+
+
             securitySchemes:
                 bearerAuth:
                     type: apiKey
