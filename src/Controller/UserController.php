@@ -16,8 +16,41 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Annotations as OA;
+
 class UserController extends AbstractController
 {
+    /**
+     * Récupère la liste des utilisateurs.
+     *
+     * @OA\Get(
+     *     path="/api/users",
+     *     summary="Récupère la liste des utilisateurs",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des utilisateurs",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/UserDetail")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Accès non autorisé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="You do not have sufficient rights to go to this page.")
+     *         )
+     *     )
+     * )
+     *
+     * @param UserRepository $userRepository
+     * @param SerializerInterface $serializer
+     * @return JsonResponse
+     */
     #[Route('api/users', name: 'all_users', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN', message: 'You do not have sufficient rights to go to this page.')]
     public function getUsersList(UserRepository $userRepository, SerializerInterface $serializer): JsonResponse
@@ -33,6 +66,44 @@ class UserController extends AbstractController
         );
     }
 
+    /**
+     * Crée un nouvel utilisateur.
+     *
+     * @OA\Post(
+     *     path="/api/users/create",
+     *     summary="Créer un nouvel utilisateur",
+     *     tags={"Users"},
+     *     @OA\RequestBody(
+     *         description="Données de l'utilisateur à créer",
+     *         required=true,
+     *         @OA\JsonContent(
+     *             ref="#/components/schemas/UserCreate"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Utilisateur créé avec succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Create new user success")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Erreur de validation",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Validation error")
+     *         )
+     *     )
+     * )
+     *
+     * @param Request $request
+     * @param SerializerInterface $serializer
+     * @param EntityManagerInterface $entityManager
+     * @param UserPasswordHasherInterface $userPasswordHasherInterface
+     * @return JsonResponse
+     */
     #[Route('api/users/create', name: 'create_user', methods: ['POST'])]
     public function createUser(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasherInterface): JsonResponse
     {
@@ -55,6 +126,54 @@ class UserController extends AbstractController
         return new JsonResponse(['message' => 'Create new user success'], Response::HTTP_CREATED);
     }
 
+    /**
+     * Récupère les détails d'un utilisateur.
+     *
+     * @OA\Get(
+     *     path="/api/users/{id}",
+     *     summary="Obtenir les détails d'un utilisateur",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails de l'utilisateur",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Success"),
+     *             @OA\Property(property="data", ref="#/components/schemas/UserDetail")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Accès non autorisé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="You do not have sufficient rights to view this user."),
+     *             @OA\Property(property="error_code", type="string", example="ACCESS_DENIED")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Utilisateur non trouvé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="User not found")
+     *         )
+     *     )
+     * )
+     *
+     * @param int $id
+     * @param UserRepository $userRepository
+     * @param SerializerInterface $serializer
+     * @param UserInterface $currentUser
+     * @return JsonResponse
+     */
     #[Route('api/users/{id}', name: 'detailUser', methods: ['GET'])]
     public function getUserFromId($id, UserRepository $userRepository, SerializerInterface $serializer, UserInterface $currentUser): JsonResponse
     {
@@ -83,6 +202,57 @@ class UserController extends AbstractController
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
 
+    /**
+     * Met à jour les informations d'un utilisateur.
+     *
+     * @OA\Put(
+     *     path="/api/users/update/{id}",
+     *     summary="Met à jour les informations d'un utilisateur",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Données de l'utilisateur à mettre à jour",
+     *         required=true,
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="Address", type="string"),
+     *             @OA\Property(property="password", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mise à jour réussie",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Update successful")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Utilisateur non trouvé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="User not found")
+     *         )
+     *     )
+     * )
+     *
+     * @param int $id
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @param EntityManagerInterface $entityManager
+     * @param SerializerInterface $serializer
+     * @param UserPasswordHasherInterface $userPasswordHasherInterface
+     * @param UserInterface $currentUser
+     * @return JsonResponse
+     */
     #[Route('api/users/update/{id}', name: 'update_user', methods: ['PUT', 'PATCH'])]
     public function updateUser($id, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, SerializerInterface $serializer, ValidatorInterface $validator, UserPasswordHasherInterface $userPasswordHasherInterface, UserInterface $currentUser): JsonResponse
     {
@@ -149,6 +319,44 @@ class UserController extends AbstractController
         return new JsonResponse(['message' => 'Update successful'], Response::HTTP_OK);
     }
 
+    /**
+     * Supprime un utilisateur.
+     *
+     * @OA\Delete(
+     *     path="/api/users/delete/{id}",
+     *     summary="Supprime un utilisateur",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Succès",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Success")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Utilisateur non trouvé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="User not found")
+     *         )
+     *     )
+     * )
+     *
+     * @param int $id
+     * @param UserRepository $userRepository
+     * @param EntityManagerInterface $entityManager
+     * @param UserInterface $currentUser
+     * @return JsonResponse
+     */
     #[Route('api/users/delete/{id}', name: 'delete_user', methods: ['DELETE'])]
     public function deleteUser($id, UserRepository $userRepository, EntityManagerInterface $entityManager, UserInterface $currentUser): JsonResponse
     {

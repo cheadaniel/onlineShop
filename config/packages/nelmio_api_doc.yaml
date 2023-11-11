@@ -72,12 +72,24 @@ nelmio_api_doc:
                         id:
                             type: integer
                             example: 1
-                        username:
-                            type: string
-                            example: test_user
                         email:
                             type: string
                             example: test@test.com
+                        address:
+                            type: string
+                            example: une adresse
+
+                UserCreate:
+                    type: object
+                    properties:
+                        password:
+                            type: string
+                        email:
+                            type: string
+                            example: example@example.com
+                        address:
+                            type: string
+                            example: une adresse
 
                 ProductDetail:
                     type: object
