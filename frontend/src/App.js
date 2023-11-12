@@ -5,6 +5,7 @@ import Footer from './components/assets/Footer/footer';
 import ProductsList from './components/productList/ProductsList';
 import ProductDetail from './components/productCard/productDetail';
 import LoginForm from './components/assets/login/Login';
+import RegistrationForm from './components/assets/Register/Register';
 import APIDocumentation from './components/APIDocumentation/APIDoc';
 import Home from './components/assets/Home/Home';
 
@@ -34,6 +35,7 @@ const App = () => {
           path="/login"
           element={<LoginForm onLogin={handleLogin} />}
         />
+        <Route path="/register" element={<RegistrationForm />} />
         <Route path="/api/doc" element={<APIDocumentation />} />
       </Routes>
       <main>

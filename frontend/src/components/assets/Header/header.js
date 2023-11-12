@@ -56,6 +56,9 @@ const Header = ({ isAuthenticated, isAdmin, onLogout }) => {
                                 <Link to="/login">Connexion</Link>
                             </li>
                             <li>
+                                <Link to="/register">S'inscrire</Link>
+                            </li>
+                            <li>
                                 <Link to="/cart">Panier</Link>
                             </li>
                         </>
