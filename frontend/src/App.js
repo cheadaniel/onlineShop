@@ -6,6 +6,7 @@ import ProductsList from './components/productList/ProductsList';
 import ProductDetail from './components/productCard/productDetail';
 import LoginForm from './components/assets/login/Login';
 import APIDocumentation from './components/APIDocumentation/APIDoc';
+import Home from './components/assets/Home/Home';
 
 const App = () => {
   const [token, setToken] = useState(null);
@@ -25,6 +26,8 @@ const App = () => {
     <Router>
       <Header isAuthenticated={isAuthenticated} isAdmin={isAdmin} onLogout={handleLogout} />
       <Routes>
+        <Route path="/" element={<Home />} />
+
         <Route path="/products" element={<ProductsList />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route
@@ -34,7 +37,6 @@ const App = () => {
         <Route path="/api/doc" element={<APIDocumentation />} />
       </Routes>
       <main>
-
       </main>
       <Footer />
     </Router>

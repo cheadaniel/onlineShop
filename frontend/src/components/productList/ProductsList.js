@@ -22,7 +22,6 @@ const ProductsList = () => {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-
     </div>
   );
 };
