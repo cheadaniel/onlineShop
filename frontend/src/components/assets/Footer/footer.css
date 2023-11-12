@@ -10,4 +10,10 @@ footer {
   width: 100%;
 }
 
-/* Ajoutez d'autres styles selon vos besoins */
+footer a {
+  color: #fff;
+}
+
+footer a:hover {
+  color: #28a745;
+}

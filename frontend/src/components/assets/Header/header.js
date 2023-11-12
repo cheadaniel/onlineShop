@@ -7,17 +7,14 @@ const Header = ({ isAuthenticated, isAdmin, onLogout }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Ajoutez votre logique de déconnexion ici
         onLogout();
-
-        // Utilisez le hook navigate pour effectuer la redirection vers la page d'accueil
         navigate('/');
     };
 
     return (
         <header>
             <h1>
-                <Link to="/">onlineShop</Link>
+                <Link to="/">Online Shop</Link>
             </h1>
             <nav>
                 <ul>

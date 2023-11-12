@@ -6,7 +6,6 @@ const LogoutButton = ({ onLogout }) => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Ajoutez votre logique de déconnexion ici
         onLogout();
         localStorage.removeItem('token');
         navigate('/login');

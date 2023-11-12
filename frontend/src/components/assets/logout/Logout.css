@@ -1,17 +1,13 @@
-/* logoutButton.css */
-
 button {
-    background-color: #dc3545;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #c82333;
-  }
-  
-  /* Ajoutez d'autres styles selon vos besoins */
-  
+  background-color: #dc3545;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #c82333;
+}
+

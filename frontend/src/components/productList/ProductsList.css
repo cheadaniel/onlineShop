@@ -1,10 +1,8 @@
-/* ProductsList.css */
-
 .product-list-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: space-around; /* Ajustez selon vos besoins */
+  justify-content: space-around;
 }
 
 .product-list-title {
@@ -14,30 +12,25 @@
   margin-bottom: 20px;
 }
 
-/* Additional styling for the card */
 .card {
   border: 1px solid #ccc;
   border-radius: 8px;
   overflow: hidden;
-  width: calc(
-    33.33% - 20px
-  ); /* Ajustez la largeur selon vos besoins et l'espacement de la carte */
-  max-width: 300px; /* Ajustez selon vos besoins */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajoutez une ombre selon vos préférences */
-  transition: transform 0.3s ease-in-out; /* Ajoutez une transition pour un effet de survol */
+  width: calc(33.33% - 20px);
+  max-width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
   margin-bottom: 20px;
 }
 
 .card:hover {
-  transform: scale(
-    1.05
-  ); /* Ajustez la mise à l'échelle au survol selon vos besoins */
+  transform: scale(1.05);
 }
 
 .card img {
   width: 100%;
-  height: 450px; /* Ajustez la hauteur selon vos besoins */
-  object-fit: cover; /* Ajustez l'ajustement de l'objet selon vos besoins */
+  height: 450px;
+  object-fit: cover;
 }
 
 .card-body {
@@ -45,7 +38,7 @@
 }
 
 .title {
-  font-size: 16px; /* Ajustez la taille de la police selon vos besoins */
+  font-size: 16px;
   font-weight: bold;
   margin-bottom: 8px;
 }
@@ -95,5 +88,3 @@
 .add-to-cart:hover {
   background-color: #218838;
 }
-
-/* Add any additional styling for the card as needed */

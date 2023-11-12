@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Login.css'; // Importez le fichier CSS
+import './Login.css';
 
 
 const LoginForm = ({ onLogin }) => {
@@ -28,8 +28,6 @@ const LoginForm = ({ onLogin }) => {
             });
 
             const token = response.data.token;
-
-            // Stockez le token dans le stockage local
             localStorage.setItem('token', token);
 
             return token;
@@ -45,7 +43,6 @@ const LoginForm = ({ onLogin }) => {
         try {
             const token = await authenticate(credentials.username, credentials.password);
 
-            // Appeler la fonction de connexion du parent avec le token
             onLogin(token);
             // Rediriger vers la page des produits
             navigate('/products');

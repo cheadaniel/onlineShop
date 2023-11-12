@@ -8,7 +8,7 @@ const ProductsList = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Effectue une requête GET à votre API Symfony pour obtenir la liste des produits
+    // Effectue une requête GET à  API Symfony pour obtenir la liste des produits
     axios.get('http://localhost:8000/api/products')
       .then(response => setProducts(response.data))
       .catch(error => console.error('Error fetching products:', error));

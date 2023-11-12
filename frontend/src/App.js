@@ -34,7 +34,7 @@ const App = () => {
         <Route path="/api/doc" element={<APIDocumentation />} />
       </Routes>
       <main>
-        <APIDocumentation />
+
       </main>
       <Footer />
     </Router>
