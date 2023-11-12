@@ -1,39 +1,51 @@
-.product-list {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.product-list-title {
-  text-align: center;
-  margin-bottom: 20px;
-}
+/* ProductsList.css */
 
 .product-list-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: space-around; /* Ajustez selon vos besoins */
 }
 
+.product-list-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Additional styling for the card */
 .card {
   border: 1px solid #ccc;
   border-radius: 8px;
   overflow: hidden;
-  width: 100%;
-  max-width: 300px;
+  width: calc(
+    33.33% - 20px
+  ); /* Ajustez la largeur selon vos besoins et l'espacement de la carte */
+  max-width: 300px; /* Ajustez selon vos besoins */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ajoutez une ombre selon vos préférences */
+  transition: transform 0.3s ease-in-out; /* Ajoutez une transition pour un effet de survol */
+  margin-bottom: 20px;
+}
+
+.card:hover {
+  transform: scale(
+    1.05
+  ); /* Ajustez la mise à l'échelle au survol selon vos besoins */
 }
 
 .card img {
   width: 100%;
-  height: auto;
+  height: 450px; /* Ajustez la hauteur selon vos besoins */
+  object-fit: cover; /* Ajustez l'ajustement de l'objet selon vos besoins */
 }
 
 .card-body {
   padding: 15px;
-  position: relative;
 }
 
 .title {
-  font-size: 18px;
+  font-size: 16px; /* Ajustez la taille de la police selon vos besoins */
   font-weight: bold;
   margin-bottom: 8px;
 }
@@ -45,39 +57,43 @@
 
 .inventory {
   color: #888;
+  margin-bottom: 8px;
 }
 
 .product-link {
-  display: block;
-  text-align: center;
-  padding: 8px;
-  background-color: #3498db;
-  color: #fff;
   text-decoration: none;
-  border-radius: 5px;
+  color: #007bff;
+  display: block;
   margin-top: 10px;
+  background-color: #fff;
+  border: 1px solid #007bff;
+  padding: 8px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
-.product-unavailable {
-  text-align: center;
-  color: red;
-  margin-top: 10px;
+.product-link:hover {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #0056b3;
 }
 
 .add-to-cart {
-  display: block;
-  width: 100%;
-  padding: 8px;
-  background-color: #2ecc71;
+  background-color: #28a745;
   color: #fff;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  margin-top: 10px;
+  border: none;
+  padding: 10px;
   cursor: pointer;
+  margin-top: 10px;
+  text-align: center;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.add-to-cart:disabled {
-  background-color: #bdc3c7;
-  cursor: not-allowed;
+.add-to-cart:hover {
+  background-color: #218838;
 }
+
+/* Add any additional styling for the card as needed */
