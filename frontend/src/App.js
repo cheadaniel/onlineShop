@@ -20,6 +20,7 @@ import UserProfiles from './components/User/Users';
 import WalletUpdateComponent from './components/User/UpdateWallet';
 import AdminRouteGuard from './components/AdminRouteGuard/AdminRouteGuard';
 import CommandsList from './components/Command/Commands';
+import ProductForm from './components/Product/productForm/productForm';
 
 
 
@@ -73,7 +74,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
 
         <Route path="/products" element={<ProductsList />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/products/:id" element={<ProductDetail isAdmin={isAdmin}/>} />
         <Route
           path="/login"
           element={<LoginForm onLogin={handleLogin} />}
@@ -85,8 +86,10 @@ const App = () => {
         <Route path="/command/:id" element={<CommandDetail userId={userID} />} />
         <Route path="/my_account" element={<UserProfile userId={userID} />} />
         <Route path="/update-wallet/:id/:amount" element={<AdminRouteGuard isAdmin={isAdmin}><WalletUpdateComponent /></AdminRouteGuard>} />
-        <Route path="/users" element={<AdminRouteGuard isAdmin={isAdmin}><UserProfiles userId={userID} /></AdminRouteGuard>} />
+        <Route path="/users" element={<AdminRouteGuard isAdmin={isAdmin}><UserProfiles /></AdminRouteGuard>} />
         <Route path="/commands" element={<AdminRouteGuard isAdmin={isAdmin}><CommandsList userId={userID} /></AdminRouteGuard>} />
+        <Route path="/add" element={<AdminRouteGuard isAdmin={isAdmin}><ProductForm/></AdminRouteGuard>} />
+        <Route path="/products/:productId/edit" element={<AdminRouteGuard isAdmin={isAdmin}><ProductForm/></AdminRouteGuard>} />
 
       </Routes>
       <main>

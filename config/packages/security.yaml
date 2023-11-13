@@ -42,6 +42,7 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/doc, roles: PUBLIC_ACCESS }
         - { path: ^/api/products, roles: PUBLIC_ACCESS }
+        - { path: ^/api/products/create, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/users/create, roles: PUBLIC_ACCESS }
         - { path: ^/api/commands, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }

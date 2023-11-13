@@ -36,7 +36,8 @@
 }
 
 .product-link,
-.back-to-list-button {
+.back-to-list-button,
+.edit-product-button {
   text-decoration: none;
   color: #007bff;
   display: block;
@@ -50,7 +51,8 @@
   transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
-.product-link:hover {
+.product-link:hover,
+.edit-product-button:hover {
   background-color: #007bff;
   color: #fff;
   border: 1px solid #0056b3;

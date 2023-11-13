@@ -6,7 +6,7 @@ import { addToCart } from '../../../app/features/cart/cartSlice';
 import { useDispatch } from 'react-redux';
 
 
-const ProductDetail = () => {
+const ProductDetail = (isAdmin) => {
     const dispatch = useDispatch();
     const { id } = useParams();
     const [product, setProduct] = useState(null);
@@ -45,6 +45,11 @@ const ProductDetail = () => {
                     <Link to={`/products/${product.id}`} className="product-link">
                         Voir le produit
                     </Link>
+                    {isAdmin && (
+                        <Link to={`/products/${product.id}/edit`} className="edit-product-button">
+                            Modifier le produit
+                        </Link>
+                    )}
                     {product.Inventory > 0 && (
                         <button className="add-to-cart" onClick={handleAddToCart}>
                             Ajouter au panier
