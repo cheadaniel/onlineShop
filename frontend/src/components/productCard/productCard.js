@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = () => {
     dispatch(addToCart({
       product_id: product.id,
-      quantity: 1, // Vous pouvez ajuster la quantité selon vos besoins
+      quantity: 1,
       name: product.Name,
       product_price: product.Price
     }));

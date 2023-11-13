@@ -8,6 +8,7 @@ const ErrorComponent = ({ message }) => {
   const handleOkClick = () => {
     // Redirige vers la page de connexion
     navigate('/login');
+
   };
 
   return (

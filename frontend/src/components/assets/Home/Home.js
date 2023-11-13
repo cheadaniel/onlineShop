@@ -1,4 +1,3 @@
-// Home.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from '../../productCard/productCard';
@@ -18,7 +17,7 @@ const Home = () => {
         };
 
         const fetchProducts = async () => {
-            const productIds = [1, 2, 3, 4, 5,6];
+            const productIds = [1, 2, 3, 4, 5, 6];
 
             for (const productId of productIds) {
                 await fetchProduct(productId);
