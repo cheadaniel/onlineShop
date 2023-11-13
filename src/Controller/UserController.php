@@ -506,4 +506,87 @@ class UserController extends AbstractController
 
         return new JsonResponse(['message' => 'Success'], Response::HTTP_OK);
     }
+    /**
+     * Modifie le wallet d'un utilisateur (réservé à l'admin).
+     * @OA\Put(
+     *     path="/api/users/update-wallet/{userId}/{amount}",
+     *     summary="Modifie le wallet d'un utilisateur (réservé à l'admin).",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer"),
+     *         description="ID de l'utilisateur."
+     *     ),
+     *     @OA\Parameter(
+     *         name="amount",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="float"),
+     *         description="Montant à ajouter au wallet."
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Wallet mis à jour avec succès.",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Wallet mis à jour avec succès.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Accès non autorisé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="You do not have sufficient rights to update the wallet."),
+     *             @OA\Property(property="error_code", type="string", example="ACCESS_DENIED")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Utilisateur non trouvé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="User not found")
+     *         )
+     *     ),
+     * )
+     *
+     * @param int $userId
+     * @param float $amount
+     * @param UserRepository $userRepository
+     * @param EntityManagerInterface $entityManager
+     * @param UserInterface $currentUser
+     * @return JsonResponse
+     */
+    #[Route('api/users/update-wallet/{userId}/{amount}', name: 'update_wallet', methods: ['PUT'])]
+
+    public function updateWallet($userId, $amount, UserRepository $userRepository, EntityManagerInterface $entityManager, UserInterface $currentUser): JsonResponse
+    {
+        // Vérifier si l'utilisateur actuel est admin
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $responseData = [
+                'message' => 'You do not have sufficient rights to update the wallet.',
+                'error_code' => 'ACCESS_DENIED',
+            ];
+
+            return new JsonResponse($responseData, Response::HTTP_FORBIDDEN);
+        }
+
+        // Récupérer l'utilisateur à partir de l'ID
+        $user = $userRepository->find($userId);
+
+        if (!$user) {
+            return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Mettre à jour le wallet de l'utilisateur
+        $user->setWallet($user->getWallet() + $amount);
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse(['message' => 'Wallet updated successfully'], Response::HTTP_OK);
+    }
 }
