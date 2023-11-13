@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './CommandList.css'
 import { Link } from 'react-router-dom';
+import ErrorComponent from '../assets/Error/Error';
 
 const CommandList = ({ userId }) => {
     const [commands, setCommands] = useState([]);
@@ -35,6 +36,8 @@ const CommandList = ({ userId }) => {
 
     return (
         <div className="command-list-container">
+            {error && <ErrorComponent message={error} />}
+
             <h2 className="command-list-title">Your Commands</h2>
             <button className="command-list-button" onClick={fetchCommands}>Voir Mes Commandes</button>
             <table className="command-list-table">

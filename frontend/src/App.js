@@ -14,6 +14,7 @@ import Home from './components/assets/Home/Home';
 import { setUserId } from './app/features/cart/cartSlice';
 import ShoppingCart from './components/shoppingCart/shoppingCart';
 import CommandList from './components/Command/CommandList';
+import CommandDetail from './components/Command/CommandDetail';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -75,6 +76,7 @@ const App = () => {
         <Route path="/api/doc" element={<APIDocumentation />} />
         <Route path="/panier" element={<ShoppingCart />} />
         <Route path="/my_orders" element={<CommandList userId={userID} />} />
+        <Route path="/command/:id" element={<CommandDetail userId={userID} />} />
 
       </Routes>
       <main>
