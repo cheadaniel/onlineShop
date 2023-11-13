@@ -1,9 +1,7 @@
-// ShoppingCart.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../../app/features/cart/cartSlice';
-import { Link, useNavigate } from 'react-router-dom';
 
 
 import './shoppingCart.css'
@@ -11,7 +9,6 @@ import ErrorComponent from '../assets/Error/Error';
 
 const ShoppingCart = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const cartState = useSelector((state) => state.cart);
     const [error, setError] = useState(null);
 
@@ -51,25 +48,20 @@ const ShoppingCart = () => {
             return;
         }
 
-        // Ajoutez le token dans les en-têtes de la requête
         const headers = {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
         };
 
-        // Supposons que `commandData` contient les données de la commande à envoyer
         const commandData = productsJson
 
         axios.post('http://localhost:8000/api/commands/create', commandData, { headers })
             .then(response => {
-                // Gérez ici la réponse réussie de l'API
                 console.log(response.data.message);
             })
             .catch(error => {
-                // Gérez ici les erreurs de l'API
                 console.error('API error:', error.response.data.message);
 
-                // Affichez des messages d'erreur à l'utilisateur en fonction de la réponse de l'API
                 if (error.response.status === 401) {
                     alert('Vous devez être connecté pour valider la commande.');
                 } else if (error.response.status === 404) {
@@ -77,46 +69,47 @@ const ShoppingCart = () => {
                 } else if (error.response.status === 400) {
                     alert('Fonds insuffisants dans votre portefeuille.');
                 } else {
-                    // Autres erreurs non gérées
                     alert('Une erreur inattendue s\'est produite.');
                 }
             });
     };
 
     return (
-        <div className="shopping-cart-container">
-            {error && <ErrorComponent message={error} />}
-            <h2 className="cart-heading">Shopping Cart</h2>
-            <p className="total-price">Total Price: ${cartState.total_price}</p>
+        <div className="shopping-cart">
+            <div className="shopping-cart-container">
+                {error && <ErrorComponent message={error} />}
+                <h2 className="cart-heading">Mon panier</h2>
+                <p className="total-price">Prix total: {cartState.total_price} €</p>
 
-            <h3 className="cart-heading-products">Products in Cart:</h3>
-            <table className="cart-table">
-                <thead>
-                    <tr>
-                        <th>Nom du produit</th>
-                        <th>Prix unitaire</th>
-                        <th>Quantité</th>
-                        <th>Prix total</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {cartState.products.map((product) => (
-                        <tr key={product.product_id}>
-                            <td>{product.name}</td>
-                            <td>{product.product_price} €</td>
-                            <td>{product.quantity}</td>
-                            <td>{product.total_price} €</td>
-                            <td>
-                                <button className="cart-button" onClick={() => handleIncreaseQuantity(product.product_id, product.product_price)}>+</button>
-                                <button className="cart-button" onClick={() => handleDecreaseQuantity(product.product_id, product.product_price)}>-</button>
-                                <button className="cart-button" onClick={() => handleRemoveFromCart(product.product_id)}>X</button>
-                            </td>
+                <h3 className="cart-heading-products">Produits présents dans le panier:</h3>
+                <table className="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Nom du produit</th>
+                            <th>Prix unitaire</th>
+                            <th>Quantité</th>
+                            <th>Prix total</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            <button className="cart-button" onClick={() => handleCheckout(cartState)}>Valider la commande</button>
+                    </thead>
+                    <tbody>
+                        {cartState.products.map((product) => (
+                            <tr key={product.product_id}>
+                                <td>{product.name}</td>
+                                <td>{product.product_price} €</td>
+                                <td>{product.quantity}</td>
+                                <td>{product.total_price} €</td>
+                                <td>
+                                    <button className="cart-button" onClick={() => handleDecreaseQuantity(product.product_id, product.product_price)}>-</button>
+                                    <button className="cart-button" onClick={() => handleIncreaseQuantity(product.product_id, product.product_price)}>+</button>
+                                    <button className="cart-button" onClick={() => handleRemoveFromCart(product.product_id)}>Supprimer</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <button className="cart-button" onClick={() => handleCheckout(cartState)}>Valider la commande</button>
+            </div>
         </div>
     );
 };
