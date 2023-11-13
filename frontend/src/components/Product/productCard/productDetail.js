@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './productDetail.css';
-import { addToCart } from '../../app/features/cart/cartSlice';
+import { addToCart } from '../../../app/features/cart/cartSlice';
 import { useDispatch } from 'react-redux';
 
 

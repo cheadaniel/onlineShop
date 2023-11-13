@@ -6,7 +6,7 @@ import axios from 'axios';
 import Header from './components/assets/Header/header';
 import Footer from './components/assets/Footer/footer';
 import ProductsList from './components/Product/productList/ProductsList';
-import ProductDetail from './components/productCard/productDetail';
+import ProductDetail from './components/Product/productCard/productDetail';
 import LoginForm from './components/assets/login/Login';
 import RegistrationForm from './components/assets/Register/Register';
 import APIDocumentation from './components/APIDocumentation/APIDoc';
