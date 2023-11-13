@@ -401,7 +401,7 @@ class UserController extends AbstractController
         $jsonData = json_decode($data, true);
 
         //Verifier les données du Json et voir si le mot de passe a été modifier, si ce n'est pas le cas alors on récupere le mot de passe de la base de donnée afin d'éviter une erreur sur le getPassword() à null et non en string
-        if (!array_key_exists('password', $jsonData)) {
+        if (!array_key_exists('password', $jsonData) || $jsonData['password'] == '') {
             $jsonData['password'] = $user->getPassword();
             $data = json_encode($jsonData);
         }

@@ -45,6 +45,8 @@ security:
         - { path: ^/api/users/create, roles: PUBLIC_ACCESS }
         - { path: ^/api/commands, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/users, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/command-line, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:
