@@ -522,7 +522,7 @@ class UserController extends AbstractController
      *         name="amount",
      *         in="path",
      *         required=true,
-     *         @OA\Schema(type="float"),
+     *         @OA\Schema(type="integer"),
      *         description="Montant à ajouter au wallet."
      *     ),
      *     @OA\Response(
@@ -579,6 +579,7 @@ class UserController extends AbstractController
         if (!$user) {
             return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
+        $amount = (float) $amount;
 
         // Mettre à jour le wallet de l'utilisateur
         $user->setWallet($user->getWallet() + $amount);
