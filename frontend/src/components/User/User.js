@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import ErrorComponent from '../assets/Error/Error';
 import UserForm from './UserForm';
+import './User.css'
 
 const UserProfile = ({ userId }) => {
     const navigate = useNavigate();
@@ -56,7 +57,7 @@ const UserProfile = ({ userId }) => {
     }
 
     return (
-        <div>
+        <div className="user-info-section">
             {error && <ErrorComponent message={error} />}
             <div>
                 <h2>Informations de l'utilisateur</h2>
@@ -65,7 +66,7 @@ const UserProfile = ({ userId }) => {
                 <p>Portefeuille : {user.Wallet}</p>
             </div>
 
-            <button onClick={handleShowForm}>Modifier le profil</button>
+            <button className="modify-profile-button" onClick={handleShowForm}>Modifier le profil</button>
 
             {showForm && (
                 <UserForm
