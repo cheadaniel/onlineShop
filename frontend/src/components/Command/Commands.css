@@ -1,0 +1,56 @@
+.command-list-container {
+  margin: 20px;
+}
+
+.command-list-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.command-list-button {
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.command-list-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.command-list-table th,
+.command-list-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.command-list-table th {
+  background-color: #f2f2f2;
+}
+
+.details-button {
+  margin-right: 10px;
+  padding: 6px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+select {
+  padding: 6px;
+  font-size: 0.9em;
+}
+
+button {
+  padding: 6px 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.td-select {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}

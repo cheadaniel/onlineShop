@@ -16,7 +16,12 @@ import ShoppingCart from './components/shoppingCart/shoppingCart';
 import CommandList from './components/Command/CommandList';
 import CommandDetail from './components/Command/CommandDetail';
 import UserProfile from './components/User/User';
+import UserProfiles from './components/User/Users';
 import WalletUpdateComponent from './components/User/UpdateWallet';
+import AdminRouteGuard from './components/AdminRouteGuard/AdminRouteGuard';
+import CommandsList from './components/Command/Commands';
+
+
 
 const App = () => {
   const dispatch = useDispatch();
@@ -75,18 +80,19 @@ const App = () => {
         />
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/api/doc" element={<APIDocumentation />} />
-        <Route path="/api/doc" element={<APIDocumentation />} />
         <Route path="/panier" element={<ShoppingCart />} />
         <Route path="/my_orders" element={<CommandList userId={userID} />} />
         <Route path="/command/:id" element={<CommandDetail userId={userID} />} />
         <Route path="/my_account" element={<UserProfile userId={userID} />} />
-        <Route path="/update-wallet/:id/:amount" element={<WalletUpdateComponent />} />
+        <Route path="/update-wallet/:id/:amount" element={<AdminRouteGuard isAdmin={isAdmin}><WalletUpdateComponent /></AdminRouteGuard>} />
+        <Route path="/users" element={<AdminRouteGuard isAdmin={isAdmin}><UserProfiles userId={userID} /></AdminRouteGuard>} />
+        <Route path="/commands" element={<AdminRouteGuard isAdmin={isAdmin}><CommandsList userId={userID} /></AdminRouteGuard>} />
 
       </Routes>
       <main>
       </main>
       <Footer />
-    </Router>
+    </Router >
   );
 };
 

@@ -37,22 +37,20 @@ const CommandList = ({ userId }) => {
         <div className="command-list-container">
             {error && <ErrorComponent message={error} />}
 
-            <h2 className="command-list-title">Your Commands</h2>
+            <h2 className="command-list-title">Mes commandes</h2>
             <button className="command-list-button" onClick={fetchCommands}>Voir Mes Commandes</button>
             <table className="command-list-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Date</th>
                         <th>Status</th>
-                        <th>Total Price</th>
+                        <th>Prix Total</th>
                         <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
                     {commands.map(command => (
                         <tr key={command.id}>
-                            <td>{command.id}</td>
                             <td>{new Date(command.Date).toLocaleString()}</td>
                             <td>{command.Status}</td>
                             <td>{command.Total_Price} €</td>

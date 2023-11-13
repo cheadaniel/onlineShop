@@ -29,7 +29,10 @@ const Header = ({ isAuthenticated, isAdmin, onLogout }) => {
                                         <Link to="/add">Ajouter</Link>
                                     </li>
                                     <li>
-                                        <Link to="/my_account">Comptes</Link>
+                                        <Link to="/commands">Toutes les commandes</Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/users">Tous les comptes</Link>
                                     </li>
                                 </>
                             )}
