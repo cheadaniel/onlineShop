@@ -44,7 +44,7 @@ const Header = ({ isAuthenticated, isAdmin, onLogout }) => {
                                 </>
                             )}
                             <li>
-                                <Link to="/cart">Panier</Link>
+                                <Link to="/panier">Panier</Link>
                             </li>
                             <li>
                                 <LogoutButton onLogout={handleLogout} />
@@ -59,7 +59,7 @@ const Header = ({ isAuthenticated, isAdmin, onLogout }) => {
                                 <Link to="/register">S'inscrire</Link>
                             </li>
                             <li>
-                                <Link to="/cart">Panier</Link>
+                                <Link to="/panier">Panier</Link>
                             </li>
                         </>
                     )}
