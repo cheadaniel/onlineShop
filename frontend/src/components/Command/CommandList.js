@@ -17,7 +17,6 @@ const CommandList = ({ userId }) => {
             return;
         }
 
-        // Ajoutez le token dans les en-têtes de la requête
         const headers = {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

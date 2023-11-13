@@ -54,7 +54,6 @@ const CommandsList = ({ userId }) => {
 
         axios.put(`http://localhost:8000/api/commands/update/status/${commandId}`, { newStatus: newStatusMap[commandId] }, { headers })
             .then(response => {
-                // Mettez à jour les données après la modification du statut
                 fetchCommands();
             })
             .catch(error => {

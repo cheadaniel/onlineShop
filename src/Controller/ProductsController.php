@@ -150,7 +150,6 @@ class ProductsController extends AbstractController
         $entityManager->persist($product);
         $entityManager->flush();
 
-        // Retournez une réponse JSON indiquant que le produit a été créé avec succès
         return new JsonResponse(['message' => 'Product created'], Response::HTTP_CREATED);
     }
 

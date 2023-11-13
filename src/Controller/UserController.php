@@ -170,7 +170,6 @@ class UserController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        // Retournez une réponse JSON appropriée pour indiquer que l'utilisateur a été créé avec succès
         return new JsonResponse(['message' => 'Create new user success'], Response::HTTP_CREATED);
     }
 

@@ -45,11 +45,9 @@ const App = () => {
       const userId = response.data.id;
       const userRoles = response.data.roles;
 
-
       const userIsAdmin = userRoles.includes('ROLE_ADMIN');
       setIsAdmin(userIsAdmin);
       setUserID(userId)
-      // console.log(userId)
 
       // Dispatch de l'action setUserId pour mettre à jour l'ID de l'utilisateur dans l'état Redux
       dispatch(setUserId(userId));

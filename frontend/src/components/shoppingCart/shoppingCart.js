@@ -12,9 +12,6 @@ const ShoppingCart = () => {
     const cartState = useSelector((state) => state.cart);
     const [error, setError] = useState(null);
 
-
-    // console.log(cartState);
-
     const handleIncreaseQuantity = (productId, productPrice) => {
         // Dispatche l'action addToCart avec la nouvelle quantité
         dispatch(addToCart({ product_id: productId, product_price: productPrice, quantity: 1 }));
@@ -57,7 +54,6 @@ const ShoppingCart = () => {
 
         axios.post('http://localhost:8000/api/commands/create', commandData, { headers })
             .then(response => {
-                console.log(response.data.message);
                 // Réinitialiser le panier après une commande réussie
                 dispatch(resetCart());
             })

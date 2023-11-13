@@ -81,7 +81,6 @@ class CommandLineController extends AbstractController
                 'id' => $commandLine->getId(),
                 'quantity' => $commandLine->getQuantity(),
                 'total_price' => $commandLine->getPrice()
-                // Ajoutez d'autres propriétés de CommandLine si nécessaire
             ];
 
             // Récupérer le produit associé à la ligne de commande
@@ -93,7 +92,6 @@ class CommandLineController extends AbstractController
                     'id' => $product->getId(),
                     'name' => $product->getName(),
                     'price' => $product->getPrice()
-                    // Ajoutez d'autres propriétés de Product si nécessaire
                 ];
 
                 // Ajouter les données du produit à la ligne de commande

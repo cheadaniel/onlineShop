@@ -15,13 +15,11 @@ const ProductForm = () => {
     });
 
     useEffect(() => {
-        // Si un productId est fourni, chargez les données du produit
+        // Si un productId est fourni, charge les données du produit
         if (productId) {
             axios.get(`http://localhost:8000/api/products/${productId}`)
                 .then(response => {
                     setFormData(response.data)
-                    console.log(response.data);
-
                 }
                 )
                 .catch(error => {

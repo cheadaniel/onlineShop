@@ -31,9 +31,8 @@ const UserForm = ({ userId, user, onUpdateSuccess }) => {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             };
-            console.log(formData);
 
-            // Remplacez {userId} par la valeur réelle de userId
+            // Remplace {userId} par la valeur réelle de userId
             const response = await axios.put(
                 `http://localhost:8000/api/users/update/${userId}`,
                 formData,
