@@ -194,13 +194,15 @@ class CommandController extends AbstractController
      *         required=true,
      *         @OA\Schema(type="integer", example=1)
      *     ),
-     *     @OA\Response(
+     *      @OA\Response(
      *         response=200,
      *         description="Détails de la commande",
      *         @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="message", type="string", example="Success"),
-     *             @OA\Property(property="data", ref="#/components/schemas/CommandDetail")
+     *             @OA\Property(property="id", type="integer", example=15),
+     *             @OA\Property(property="Date", type="string", format="date-time", example="2023-11-09T11:41:00+00:00"),
+     *             @OA\Property(property="Status", type="string", example="En cours de préparation"),
+     *             @OA\Property(property="Total_Price", type="string", example="4.00")
      *         )
      *     ),
      *     @OA\Response(
