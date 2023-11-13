@@ -16,19 +16,19 @@ class Command
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['getCommands'])]
+    #[Groups(['getCommands','command:read'])]
     private ?int $id = null;
 
-    #[Groups(['getCommands'])]
+    #[Groups(['getCommands','command:read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $Date = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['getCommands'])]
+    #[Groups(['getCommands','command:read'])]
     private ?string $Status = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    #[Groups(['getCommands'])]
+    #[Groups(['getCommands','command:read'])]
     private ?string $Total_Price = null;
 
     #[ORM\ManyToOne(inversedBy: 'Command')]

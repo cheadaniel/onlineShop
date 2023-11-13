@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Command;
+use App\Repository\CommandRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -246,6 +248,82 @@ class UserController extends AbstractController
         $jsonUser = $serializer->serialize($user, 'json', ['groups' => 'getUser']);
 
         return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
+    }
+
+    /**
+     * Récupère toutes les commandes d'un utilisateur.
+     *
+     * @OA\Get(
+     *     path="/api/users/{userId}/commands",
+     *     summary="Récupère toutes les commandes d'un utilisateur",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *         name="userId",
+     *         in="path",
+     *         description="ID de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des commandes de l'utilisateur",
+     *         @OA\JsonContent(
+     *             type="array",
+     *             @OA\Items(ref="#/components/schemas/CommandDetail")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Accès non autorisé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="You do not have sufficient rights to view commands for this user."),
+     *             @OA\Property(property="error_code", type="string", example="ACCESS_DENIED")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Utilisateur non trouvé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="User not found")
+     *         )
+     *     )
+     * )
+     *
+     * @param int $userId
+     * @param UserRepository $userRepository
+     * @param CommandRepository $commandRepository
+     * @param SerializerInterface $serializer
+     * @param UserInterface $currentUser
+     * @return JsonResponse
+     */
+    #[Route('/api/users/{userId}/commands', name: 'user_commands', methods: ['GET'])]
+    public function getUserCommands($userId, UserRepository $userRepository, CommandRepository $commandRepository, SerializerInterface $serializer, UserInterface $currentUser): JsonResponse
+    {
+        $user = $userRepository->find($userId);
+
+        if (!$user) {
+            return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Vérifier les autorisations
+        if ($currentUser->getId() !== $user->getId() && !$this->isGranted('ROLE_ADMIN')) {
+            $responseData = [
+                'message' => 'You do not have sufficient rights to view commands for this user.',
+                'error_code' => 'ACCESS_DENIED',
+            ];
+
+            $response = new JsonResponse($responseData, 403);
+
+            return $response;
+        }
+
+        // Récupérer les commandes de l'utilisateur
+        $commands = $user->getCommand();
+        $jsonCommands = $serializer->serialize($commands, 'json', ['groups' => 'command:read']);
+
+        return new JsonResponse($jsonCommands, Response::HTTP_OK, [], true);
     }
 
     /**
