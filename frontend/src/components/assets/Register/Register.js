@@ -27,7 +27,7 @@ const RegistrationForm = () => {
         }
 
         try {
-            const response = await axios.post('https://localhost:8000/api/users/create', formData, {
+            const response = await axios.post('http://localhost:8000/api/users/create', formData, {
                 // Configurations pour permettre l'envoi de cookies
                 withCredentials: true,
                 // Autres configurations selon les besoins
