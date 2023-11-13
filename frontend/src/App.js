@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
@@ -13,10 +13,13 @@ import APIDocumentation from './components/APIDocumentation/APIDoc';
 import Home from './components/assets/Home/Home';
 import { setUserId } from './app/features/cart/cartSlice';
 import ShoppingCart from './components/shoppingCart/shoppingCart';
+import CommandList from './components/Command/CommandList';
 
 const App = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userID, setUserID] = useState(null)
 
   const handleLogin = async (newToken) => {
     setToken(newToken);
@@ -31,6 +34,12 @@ const App = () => {
 
       // Extraire l'ID de l'utilisateur depuis la réponse
       const userId = response.data.id;
+      const userRoles = response.data.roles;
+
+
+      const userIsAdmin = userRoles.includes('ROLE_ADMIN');
+      setIsAdmin(userIsAdmin);
+      setUserID(userId)
       // console.log(userId)
 
       // Dispatch de l'action setUserId pour mettre à jour l'ID de l'utilisateur dans l'état Redux
@@ -42,10 +51,12 @@ const App = () => {
 
   const handleLogout = () => {
     setToken(null);
+    setUserID(null)
+    setIsAdmin(false)
   };
 
+
   const isAuthenticated = token !== null;
-  const isAdmin = true;
 
   return (
     <Router>
@@ -61,8 +72,10 @@ const App = () => {
         />
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/api/doc" element={<APIDocumentation />} />
+        <Route path="/api/doc" element={<APIDocumentation />} />
         <Route path="/panier" element={<ShoppingCart />} />
-        
+        <Route path="/my_orders" element={<CommandList userId={userID} />} />
+
       </Routes>
       <main>
       </main>
