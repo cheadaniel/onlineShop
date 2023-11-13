@@ -49,10 +49,3 @@ Pour exécuter localement le projet Symfony et React, suivez ces étapes :
 
 Une documentation détaillée de chaque requête est disponible à [http://localhost:3000/api/doc](http://localhost:3000/api/doc) et [http://localhost:8000/api/doc](http://localhost:8000/api/doc).
 
-## Contributions
-
-Les contributions sont les bienvenues. Si vous souhaitez contribuer, veuillez ouvrir une nouvelle demande de tirage.
-
-## Licence
-
-Ce projet est sous licence [MIT](LICENSE).
