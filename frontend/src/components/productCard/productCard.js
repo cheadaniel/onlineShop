@@ -1,9 +1,24 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../app/features/cart/cartSlice';
 
 const ProductCard = ({ product }) => {
+  const dispatch = useDispatch();
+
+
   if (!product) {
     return <div>Loading...</div>;
   }
+
+  const handleAddToCart = () => {
+    dispatch(addToCart({
+      product_id: product.id,
+      quantity: 1, // Vous pouvez ajuster la quantité selon vos besoins
+      name: product.Name,
+      product_price: product.Price
+    }));
+  };
 
   return (
     <div key={product.id} className="card">
@@ -16,7 +31,7 @@ const ProductCard = ({ product }) => {
           Voir le produit
         </Link>
         {product.Inventory > 0 && (
-          <button className="add-to-cart">
+          <button className="add-to-cart" onClick={handleAddToCart}>
             Ajouter au panier
           </button>
         )}
