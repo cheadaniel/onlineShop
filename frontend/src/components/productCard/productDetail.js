@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './productDetail.css';
+import { addToCart } from '../../app/features/cart/cartSlice';
+import { useDispatch } from 'react-redux';
 
 
 const ProductDetail = () => {
+    const dispatch = useDispatch();
     const { id } = useParams();
     const [product, setProduct] = useState(null);
 
@@ -22,6 +25,15 @@ const ProductDetail = () => {
         return <div>Loading...</div>;
     }
 
+    const handleAddToCart = () => {
+        dispatch(addToCart({
+            product_id: product.id,
+            quantity: 1,
+            name: product.Name,
+            product_price: product.Price
+        }));
+    };
+
     return (
         <div>
             <div key={product.id} className="card">
@@ -34,7 +46,7 @@ const ProductDetail = () => {
                         Voir le produit
                     </Link>
                     {product.Inventory > 0 && (
-                        <button className="add-to-cart">
+                        <button className="add-to-cart" onClick={handleAddToCart}>
                             Ajouter au panier
                         </button>
                     )}

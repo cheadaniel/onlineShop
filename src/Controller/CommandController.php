@@ -131,7 +131,7 @@ class CommandController extends AbstractController
      * @return JsonResponse
      */
     #[Route('api/commands/create', name: 'create_command', methods: ['POST'])]
-    public function createCommand(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserRepository $userRepository, JsonDataService $jsonDataService, CreateCommandLineService $createCommandLineService): JsonResponse
+    public function createCommand(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager, ValidatorInterface $validator, UserRepository $userRepository, JsonDataService $jsonDataService, CreateCommandLineService $createCommandLineService, ProductsRepository $productsRepository): JsonResponse
     {
         $data = $request->getContent();
         $jsonData = json_decode($data, true); //Récupérer les Data, c'est un array
@@ -148,6 +148,22 @@ class CommandController extends AbstractController
         $userWallet = $user->getWallet();
         if ($userWallet < $jsonData['total_price']) {
             return new JsonResponse(['message' => 'Not enough money in User Wallet'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Vérifier la disponibilité des produits avant de créer une commande
+        $productsArray = $jsonData['products'];
+
+        foreach ($productsArray as $product) {
+            $productId = $product['product_id'];
+            $productGet = $productsRepository->find($productId);
+
+            if (!$productGet) {
+                return new JsonResponse(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
+            }
+
+            if ($product['quantity'] > $productGet->getInventory()) {
+                return new JsonResponse(['message' => 'Insufficient inventory for the product'], Response::HTTP_BAD_REQUEST);
+            }
         }
 
         // Obtenir la date avec le bon type pour pouvoir utiliser setDate correctement

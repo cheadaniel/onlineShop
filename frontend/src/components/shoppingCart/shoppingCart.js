@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart } from '../../app/features/cart/cartSlice';
+import { addToCart, removeFromCart, resetCart } from '../../app/features/cart/cartSlice';
 
 
 import './shoppingCart.css'
@@ -58,6 +58,8 @@ const ShoppingCart = () => {
         axios.post('http://localhost:8000/api/commands/create', commandData, { headers })
             .then(response => {
                 console.log(response.data.message);
+                // Réinitialiser le panier après une commande réussie
+                dispatch(resetCart());
             })
             .catch(error => {
                 console.error('API error:', error.response.data.message);
@@ -67,7 +69,7 @@ const ShoppingCart = () => {
                 } else if (error.response.status === 404) {
                     alert('Utilisateur non trouvé.');
                 } else if (error.response.status === 400) {
-                    alert('Fonds insuffisants dans votre portefeuille.');
+                    alert('Fonds insuffisants dans votre portefeuille ou Rupture de stock d\'un des produits.');
                 } else {
                     alert('Une erreur inattendue s\'est produite.');
                 }

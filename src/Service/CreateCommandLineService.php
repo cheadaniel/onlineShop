@@ -34,6 +34,11 @@ class CreateCommandLineService
                 return new JsonResponse(['message' => 'Product not found'], Response::HTTP_NOT_FOUND);
             }
 
+            // Vérifier si la quantité demandée est disponible
+            if ($product['quantity'] > $productGet->getInventory()) {
+                return new JsonResponse(['message' => 'Insufficient inventory for the product'], Response::HTTP_BAD_REQUEST);
+            }
+
             $newQuantity = $productGet->getInventory() - $product['quantity'];
             $productGet->setInventory($newQuantity);
 
