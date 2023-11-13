@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Bundle\SecurityBundle\Security as SecurityBundleSecurity;
 
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -64,6 +65,51 @@ class UserController extends AbstractController
             [],
             true
         );
+    }
+
+    /**
+     * Récupère les détails de l'utilisateur actuellement connecté.
+     *
+     * @OA\Get(
+     *     path="/api/user",
+     *     summary="Obtenir les détails de l'utilisateur actuellement connecté",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails de l'utilisateur actuellement connecté",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Success"),
+     *             @OA\Property(property="data", ref="#/components/schemas/UserDetail")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Non autorisé",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     )
+     * )
+     *
+     * @param UserRepository $userRepository
+     * @param SerializerInterface $serializer
+     * @param Security $security
+     * @return JsonResponse
+     */
+    #[Route('api/user', name: 'current_user', methods: ['GET'])]
+    public function getCurrentUser(UserRepository $userRepository, SerializerInterface $serializer, SecurityBundleSecurity $security): JsonResponse
+    {
+        $currentUser = $security->getUser();
+
+        if (!$currentUser) {
+            return new JsonResponse(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $jsonUser = $serializer->serialize($currentUser, 'json', ['groups' => 'getUser']);
+
+        return new JsonResponse($jsonUser, Response::HTTP_OK, [], true);
     }
 
     /**
